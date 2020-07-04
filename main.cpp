@@ -74,17 +74,17 @@ int main(int argc, char **argv) {
         std::cout << "Load(" << filePath << ") failed" << std::endl;
         return 1;
     }
-    
+
     if (!Load(smilePath)) {
         // iostream
         std::cout << "Load(" << smilePath << ") failed" << std::endl;
         return 1;
     }
-    
+
     addRect(
-        startX, 
-        startY, 
-        startWidth, 
+        startX,
+        startY,
+        startWidth,
         startHeight
     ); // 0 johntangle
 
@@ -193,9 +193,9 @@ int main(int argc, char **argv) {
 //         SDL_RenderCopy(
 //             renderer, // renderer
 //             filesToShow[1], // file to show
-//             NULL, // the source SDL_Rect structure or NULL for the entire texture 
+//             NULL, // the source SDL_Rect structure or NULL for the entire texture
 //             NULL // the destination SDL_Rect structure or NULL for the entire rendering target;
-//                  // the texture will be stretched to fill the given rectangle 
+//                  // the texture will be stretched to fill the given rectangle
 //         ); // smile 1
 
 //         SDL_RenderSetViewport(
@@ -207,7 +207,7 @@ int main(int argc, char **argv) {
 //         SDL_RenderCopy(
 //             renderer, // renderer
 //             filesToShow[1], // file to show
-//             NULL, // entire texture 
+//             NULL, // entire texture
 //             NULL // entire rendering target
 //         ); // smile 2
 
@@ -254,7 +254,7 @@ int main(int argc, char **argv) {
 bool Init() {
     // check SDL flags for Init
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) return false;
-    
+
     // for PNGs, but don't working for me
 //     int flags = IMG_INIT_PNG;
 //     if (!(IMG_Init(flags)&flags)) return false;
@@ -267,7 +267,7 @@ bool Init() {
             SCREEN_HEIGHT, // window height
             SDL_WINDOW_SHOWN // check SDL flags for CreateWindow
         );
-    
+
     if (window == NULL) return false;
 
     renderer = SDL_CreateRenderer(
@@ -276,17 +276,17 @@ bool Init() {
         SDL_RENDERER_ACCELERATED | // hardware acceleration
         SDL_RENDERER_PRESENTVSYNC // enable vsync
     );
-    
+
     // index or -1 to initialize the first one supporting the requested flags
     // renderer flags:
     // SDL_RENDERER_ACCELERATED - hardware acceleration
     // SDL_RENDERER_PRESENTVSYNC - enable vsync
     // SDL_RENDERER_SOFTWARE - the renderer is a software fallback
     // SDL_RENDERER_TARGETTEXTURE - the renderer supports rendering to texture
-    
+
     // getting info about window surface
 //     screen_surface = SDL_GetWindowSurface(window);
-    
+
     return true;
 }
 
@@ -318,12 +318,12 @@ bool Load(char* path) {
 
 void addRect(int x, int y, int width, int height) {
     SDL_Rect rect;
-    
+
     rect.x = x;
     rect.y = y;
     rect.w = width;
     rect.h = height;
-    
+
     rects.push_back(rect);
 }
 
@@ -339,11 +339,11 @@ void Quit() {
 
 //// Textures
     // SDL_Destroy_Texture()
-    
+
     for (int i = 0; i < filesToShow.size(); i++) {
         SDL_DestroyTexture(filesToShow[i]);
     }
-    
+
     filesToShow.clear();
 
 //// Closing programm and free memory
