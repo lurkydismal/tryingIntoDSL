@@ -100,13 +100,15 @@ int main(int argc, char **argv) {
             pressedKey = event.key.keysym.sym;
 
             if (pressedKey == SDLK_UP) {
-                rects[0].y -= speed;
-                if (rects[0].w > startWidth) rects[0].w = startWidth;
+                rects[0].y -= speed; // john moving
+
+                if (rects[0].w > startWidth) rects[0].w = startWidth; // john resizing
                 else if (rects[0].w < startWidth) rects[0].w *= 1.05;
-                pass;
+
+                pass; // pass like python pass
             } else if (pressedKey == SDLK_DOWN) {
                 rects[0].y += speed;
-                if (rects[0].w > startWidth/5) rects[0].w /= 1.01;
+                if (rects[0].w > (startWidth / 5)) rects[0].w /= 1.01;
                 pass;
             } else if (pressedKey == SDLK_LEFT) {
                 rects[0].x -= speed;
@@ -115,7 +117,7 @@ int main(int argc, char **argv) {
                 pass;
             } else if (pressedKey == SDLK_RIGHT) {
                 rects[0].x += speed;
-                if (rects[0].h > startHeight/5) rects[0].h /= 1.01;
+                if (rects[0].h > (startHeight / 5)) rects[0].h /= 1.01;
                 pass;
             } else if (pressedKey == SDLK_ESCAPE) {
                 working = false;
@@ -168,50 +170,60 @@ int main(int argc, char **argv) {
             70 // pos2 y
         ); // draw line
 
+//         addRect(
+//             0, // x
+//             0, // y
+//             SCREEN_WIDTH / 2, // width
+//             SCREEN_HEIGHT / 2 // height
+//         ); // 3 left viewport
+
+//         addRect(
+//             0, // x
+//             SCREEN_HEIGHT / 2, // y
+//             SCREEN_WIDTH, // width
+//             SCREEN_HEIGHT / 2 // height
+//         ); // 4 right viewport
+
+//         SDL_RenderSetViewport(
+//             renderer, // renderer
+//             &rects[3] // rectangle
+//         ); // smile 1
+
+//         // copy a portion of the texture to the current rendering target
+//         SDL_RenderCopy(
+//             renderer, // renderer
+//             filesToShow[1], // file to show
+//             NULL, // the source SDL_Rect structure or NULL for the entire texture 
+//             NULL // the destination SDL_Rect structure or NULL for the entire rendering target;
+//                  // the texture will be stretched to fill the given rectangle 
+//         ); // smile 1
+
+//         SDL_RenderSetViewport(
+//             renderer, // renderer
+//             &rects[4] // rectangle
+//         ); // smile 2
+
+//         // copy a portion of the texture to the current rendering target
+//         SDL_RenderCopy(
+//             renderer, // renderer
+//             filesToShow[1], // file to show
+//             NULL, // entire texture 
+//             NULL // entire rendering target
+//         ); // smile 2
+
         addRect(
             0, // x
-            500, // y
-            100, // width
-            100 // height
-        ); // 3 left viewport
-
-        addRect(
-            150, // x
-            500, // y
-            100, // width
-            100 // height
-        ); // 4 right viewport
+            0, // y
+            SCREEN_WIDTH, // width
+            SCREEN_HEIGHT // height
+        ); // 5 start windowed screen
+           // 3 if no assigned rectangles for smiles 1,2
 
         SDL_RenderSetViewport(
             renderer, // renderer
+            // change on 5 if smiles` rectangles has been assigned
+            // change on 3 if not
             &rects[3] // rectangle
-        ); // flower 1
-
-        // copy a portion of the texture to the current rendering target
-        SDL_RenderCopy(
-            renderer, // renderer
-            filesToShow[1], // file to show
-            NULL, // the source SDL_Rect structure or NULL for the entire texture 
-            NULL // the destination SDL_Rect structure or NULL for the entire rendering target;
-                 // the texture will be stretched to fill the given rectangle 
-        );
-
-        SDL_RenderSetViewport(
-            renderer, // renderer
-            &rects[4] // rectangle
-        ); // flower 2
-
-        // copy a portion of the texture to the current rendering target
-        SDL_RenderCopy(
-            renderer, // renderer
-            filesToShow[1], // file to show
-            NULL, // entire texture 
-            NULL // entire rendering target
-        );
-
-        SDL_RenderSetViewport(
-            renderer, // renderer
-            &rects[0] // rectangle
         ); // for john
 
         SDL_RenderDrawPoint(
@@ -348,6 +360,8 @@ void Quit() {
 //     IMG_Quit();
 }
 
+// Numbers as i am learned
+
 //// 4
 // SDL_Rect rect;
 // working only in functions
@@ -358,30 +372,31 @@ void Quit() {
 
 // window background
 // SDL_FillRect(
-//     screen_surface,
-//     NULL,
+//     screen_surface, // surface
+//     NULL, // rectangle
 //     SDL_MapRGB(
 //         screen_surface->format,
 //         255, 255, 255
 //     )
-// );
+// ); // white
 
-// surface on window
+// draw img on window
 // SDL_BlitSurface(
-//     filesToShow[0],
-//     NULL,
-//     screen_surface,
-//     &rect
+//     filesToShow[0], // img
+//     NULL, // the SDL_Rect structure representing the rectangle to be copied, or NULL to copy the entire surface
+//     screen_surface, // surface
+//     &rect // rectangle
 // );
 
-// surface scaling
+// img scaling
 // SDL_BlitScaled(
-//     filesToShow[0],
-//     NULL,
-//     screen_surface,
-//     &rect
+//     filesToShow[0], // img
+//     NULL, // copy the entire surface
+//     screen_surface, // surface
+//     &rect // rectangle
 // );
 
+// update window
 // SDL_UpdateWindowSurface(window);
 
 
@@ -393,20 +408,32 @@ void Quit() {
 // bg_flower.x = 0;
 // bg_flower.y = 0;
 
-// SDL_BlitScaled(flower, NULL, scr, &bg_flower);
+// SDL_BlitScaled(
+//     flower, // img
+//     NULL, // copy the entire surface
+//     scr, // surface
+//     &bg_flower // rectangle
+// );
 
 
 
 //// 2
-// SDL_BlitSurface(fileToShow, NULL, screen_surface, NULL);
+// SDL_BlitSurface(
+//     fileToShow, // img
+//     NULL, // copy the entire surface
+//     screen_surface, // surface
+//     NULL // rectangle
+// );
 
 // SDL_UpdateWindowSurface(window);
 
+// freezing window on 2000 ms
 // SDL_Delay(2000);
 
 
 
 //// 1
+    // init all flags
 //     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 //         return 1;
 //     }
@@ -418,7 +445,7 @@ void Quit() {
 //         SCREEN_WIDTH,
 //         SCREEN_HEIGHT,
 //         SDL_WINDOW_SHOWN
-//     );
+//     ); // Hello, SDL2! the window
 
 //     if (window == NULL) {
 //         return 1;
@@ -426,12 +453,12 @@ void Quit() {
 
 //     screen_surface = SDL_GetWindowSurface(window);
 //     SDL_FillRect(
-//         screen_surface,
-//         NULL,
+//         screen_surface, // surface
+//         NULL, // the SDL_Rect structure representing the rectangle to fill, or NULL to fill the entire surface
 //         SDL_MapRGB(
 //             screen_surface->format,
 //             0, 255, 0
-//         )
+//         ) // green
 //     );
 
 //     SDL_UpdateWindowSurface(window);
@@ -439,6 +466,6 @@ void Quit() {
 //     freeze window on some time in ms
 //     SDL_Delay(2000);
 
-//     SDL_DestroyWindow(window);
+//     SDL_DestroyWindow(window)
 //     SDL_Quit();
 // }
