@@ -6,7 +6,10 @@ bin-release/
 
 # Other files and folders
 .settings/
+<<<<<<< HEAD
 *.html
+=======
+>>>>>>> 7e3a654cd7c98c9f775136bc4cdfd6b7b14dd492
 
 # Executables
 *.swf
