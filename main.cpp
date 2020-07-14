@@ -77,15 +77,16 @@ vector<string> filesPath;
 
 /// classes
 struct GoingOn {
-        int pressedKey;
-        int x;
-        int y;
-        bool clicked;
+    int pressedKey;
+    int x;
+    int y;
+    bool clicked;
 } eventGoing ;
 
 class Button {
     private:
         SDL_Rect rect;
+        SDL_Rect clickedRect;
         SDL_Texture* idle;
         SDL_Texture* hover;
         int endX;
@@ -93,24 +94,30 @@ class Button {
     public:
         Button(SDL_Rect rect, SDL_Texture* idle, SDL_Texture* hover) {
             this->rect = rect;
+            this->clickedRect.x = rect.x * 1.05;
+            this->clickedRect.y = rect.y * 1;
+            this->clickedRect.w = rect.w / 1.1;
+            this->clickedRect.h = rect.h / 1.1;
             this->endX = rect.x + rect.w;
             this->endY = rect.y + rect.h;
             this->idle = idle;
             if (hover) this->hover = hover;
         }
 
-        bool Update(bool needRect) {
+        bool Update() {
             if (
                 ((this->endX > eventGoing.x) && (eventGoing.x > this->rect.x)) &&
                 ((this->endY > eventGoing.y) && (eventGoing.y > this->rect.y))
-            )
-            {
-                if (needRect) SDL_RenderCopy(renderer, this->hover, NULL, &this->rect);
-                else SDL_RenderCopy(renderer, this->hover, NULL, NULL);
-                return true;
+            ) {
+                if (eventGoing.clicked) {
+                    SDL_RenderCopy(renderer, this->hover, NULL, &this->clickedRect);
+                    return true;
+                } else {
+                    SDL_RenderCopy(renderer, this->hover, NULL, &this->rect);
+                    return false;
+                }
             } else {
-                if (needRect) SDL_RenderCopy(renderer, this->idle, NULL, &this->rect);
-                else SDL_RenderCopy(renderer, this->idle, NULL, NULL);
+                SDL_RenderCopy(renderer, this->idle, NULL, &this->rect);
                 return false;
             }
         }
@@ -172,18 +179,14 @@ int main(int argc, char **argv) {
         // SDLK - SDL Key
         if (event.type == SDL_KEYUP) {
             eventGoing.pressedKey = event.key.keysym.sym;
-            eventGoing.x = NULL;
-            eventGoing.y = NULL;
             eventGoing.clicked = false;
-            event.type = NULL;
 //             cout << SDL_GetScancodeName(event.key.keysym.scancode) << endl << SDL_GetKeyName(event.key.keysym.sym) << endl << endl;
-
         } else if (event.type == SDL_MOUSEBUTTONUP) {
-            eventGoing.x = event.button.x;
-            eventGoing.y = event.button.y;
             eventGoing.clicked = true;
-            eventGoing.pressedKey = NULL;
-            event.type = NULL;
+        } else if (event.type == SDL_MOUSEMOTION) {
+            eventGoing.x = event.motion.x;
+            eventGoing.y = event.motion.y;
+            eventGoing.clicked = false;
         }
 
         if (place == "mainMenu") MainMenu();
@@ -406,14 +409,14 @@ void MainMenu() {
         addRect(401, 575, 223, 73); // 1
 
         Load("mainMenu/idle_play"); // 0
-//         Load("mainMenu/hover_play"); // 1
-        Load("mainMenu/idle_exit"); // 2 || 1
-//         Load("mainMenu/hover_exit"); // 3
+        Load("mainMenu/hover_play"); // 1
+        Load("mainMenu/idle_exit"); // 2
+        Load("mainMenu/hover_exit"); // 3
 
-        Button temp_button1(rects[0], filesToShow[0], nullptr);
+        Button temp_button1(rects[0], filesToShow[0], filesToShow[1]);
         buttons.push_back(temp_button1); // play - 0
 
-        Button temp_button2(rects[1], filesToShow[1], nullptr);
+        Button temp_button2(rects[1], filesToShow[2], filesToShow[3]);
         buttons.push_back(temp_button2); // exit - 1
 
         mainMenuLoad = true;
@@ -426,14 +429,15 @@ void MainMenu() {
 
     SDL_RenderCopy(renderer, filesToShow[0], NULL, NULL);
 
-    // false - no rects for buttons
-    if (buttons[0].Update(true)) {
-        mainMenuLoad = false;
-        place = "lvl0";
-    } // play
-    else if (buttons[1].Update(true)) {
-        working = false;
-    } // exit
+    buttons[0].Update();
+    buttons[1].Update();
+//     if (buttons[0].Update()) {
+//         mainMenuLoad = false;
+//         place = "lvl0";
+//     } // play
+//     else if (buttons[1].Update()) {
+//         working = false;
+//     } // exit
 }
 
 // lvl0
